@@ -1,3 +1,7 @@
+/**
+ *
+ * @authors Yannick Jussub 66308 - Bernardo Fernandes 75122
+ */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,9 +25,8 @@ public class Main {
             for (int j = 0; j < R; j++) {
                 gridIn[j] = in.readLine().toCharArray();
 
-                Grid grid = new Grid(gridIn);
                 CrystalCastle castle = new CrystalCastle(grid, M, N);
-                output[i] = castle.solver();
+                output[i] = castle.solve();
             }
         }
 

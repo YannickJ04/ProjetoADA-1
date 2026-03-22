@@ -1,3 +1,9 @@
+import java.util.Arrays;
+
+/**
+ *
+ * @authors Yannick Jussub 66308 - Bernardo Fernandes 75122
+ */
 public class CrystalCastle {
     static final int MOD = 1_000_000_007;
 
