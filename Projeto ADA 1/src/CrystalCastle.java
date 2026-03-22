@@ -7,16 +7,26 @@ import java.util.Arrays;
 public class CrystalCastle {
     static final int MOD = 1_000_000_007;
 
-    public static long solve(char[][] grid, int M, int N) {
+    private final char[][] grid;
+    private final int maxConsecJumps;
+    private final int maxTotalJumps;
+
+    public CrystalCastle(char[][] grid, int M, int N) {
+    this.grid = grid;
+    this.maxConsecJumps = M;
+    this.maxTotalJumps = N;
+    }
+
+    public long solve() {
         int R = grid.length;
         int C = grid[0].length;
 
         // dp[row%3][col][consecutiveJumps][totalJumps]
-        int[][][][] dp = new int[3][C][M + 1][N + 1];
+        int[][][][] dp = new int[3][C][maxConsecJumps + 1][maxTotalJumps + 1];
 
         for (int s = 0; s < 3; s++)
             for (int c = 0; c < C; c++)
-                for (int m = 0; m <= M; m++)
+                for (int m = 0; m <= maxConsecJumps; m++)
                     Arrays.fill(dp[s][c][m], 0);
 
         dp[0][0][0][0] = 1;
@@ -24,7 +34,7 @@ public class CrystalCastle {
         for (int r = 0; r < R; r++) {
             int clearSlot = (r + 2) % 3;
             for (int c = 0; c < C; c++)
-                for (int m = 0; m <= M; m++)
+                for (int m = 0; m <= maxConsecJumps; m++)
                     Arrays.fill(dp[clearSlot][c][m], 0);
 
             int rSlot = r % 3;
@@ -33,8 +43,8 @@ public class CrystalCastle {
                 if (grid[r][c] == '#') continue;
                 char tile = grid[r][c];
 
-                for (int consec = 0; consec <= M; consec++) {
-                    for (int total = 0; total <= N; total++) {
+                for (int consec = 0; consec <= maxConsecJumps; consec++) {
+                    for (int total = 0; total <= maxTotalJumps; total++) {
                         int val = dp[rSlot][c][consec][total];
                         if (val == 0) continue;
 
@@ -52,7 +62,7 @@ public class CrystalCastle {
                         }
 
                         // Jumps: need consec < M and total < N
-                        if (consec < M && total < N) {
+                        if (consec < maxConsecJumps && total < maxTotalJumps) {
                             // LD: (r+1, c-1) — diagonal, forbidden from X and J
                             if (tile != 'X' && tile != 'J') {
                                 if (r + 1 < R && c - 1 >= 0 && grid[r + 1][c - 1] != '#') {
@@ -87,8 +97,8 @@ public class CrystalCastle {
 
         long ans = 0;
         int lastSlot = (R - 1) % 3;
-        for (int consec = 0; consec <= M; consec++) {
-            for (int total = 0; total <= N; total++) {
+        for (int consec = 0; consec <= maxConsecJumps; consec++) {
+            for (int total = 0; total <= maxTotalJumps; total++) {
                 ans = (ans + dp[lastSlot][C - 1][consec][total]) % MOD;
             }
         }
